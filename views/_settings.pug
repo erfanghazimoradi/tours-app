@@ -1,0 +1,51 @@
+extends account
+
+
+block nav-item 
+  +navItem('/account/settings', 'Settings', 'settings', true)
+  +navItem('/account/password', 'Password', 'lock')
+  +navItem('#', 'Bookings', 'briefcase')
+  +navItem('#', 'Reviews', 'star')
+  +navItem('#', 'Billing', 'credit-card')
+
+block account-section
+  .user-view__form-container
+    h2.heading-secondary.ma-bt-md Your account settings
+    form#editAccountForm.form.form-user-data
+      .form__group.form__photo-upload
+        img.form__user-photo(src=`/img/users/${user.avatar}`, alt='User photo')
+        a.btn-text(href='') Choose new photo
+      .form__group
+        label.form__label(for='firstname') First name
+        input#firstname.form__input(type='text', value=`${user.firstname}`, required)
+      .form__group
+        label.form__label(for='lastname') Last name
+        input#lastname.form__input(type='text', value=`${user.lastname}`, required)
+      .form__group
+        label.form__label(for='gender') Gender
+        select#gender.form__input(data-gender=`${user.gender}`)
+          option(value='not-set') Rather not say
+          option(value='male') Male
+          option(value='female') Female
+          option(value='other') Other
+      .form__group.ma-bt-md
+        label.form__label(for='email') Email address
+        input#email.form__input(type='email', value=`${user.email}`, required)
+      .form__group.right
+        button.btn.btn--small.btn--green(type='submit') Save settings
+  .line &nbsp;
+
+  .user-view__form-container
+    h2.heading-secondary-warning.ma-bt-md Deactive Your Account
+    .form__group.ma-bt-md
+        label.form__label.text(for='') Dont worry, you can active your account again when Logged in.
+    .form__group.right
+        button#deactiveAccountBtn.btn.btn--small.btn--yellow Deactive account
+  .line &nbsp;
+
+  .user-view__form-container
+    h2.heading-secondary-danger.ma-bt-md Delete Your Account
+    .form__group.ma-bt-md
+        label.form__label.text(for='') Once you delete your account, there is no going back. Please be certain.
+    .form__group.right
+        button#deleteAccountBtn.btn.btn--small.btn--red Delete account

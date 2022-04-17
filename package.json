@@ -1,0 +1,47 @@
+{
+  "name": "tours",
+  "version": "1.0.0",
+  "description": "Tours App",
+  "main": "app.js",
+  "targets": {
+    "main": false,
+    "frontend": {
+      "source": "./public/javascripts/src/main.js",
+      "distDir": "./public/javascripts/dist"
+    }
+  },
+  "scripts": {
+    "start": "cross-env NODE_ENV=production nodemon app.js",
+    "dev": "nodemon app.js",
+    "watch": "parcel watch --target frontend"
+  },
+  "keywords": [],
+  "author": "ErfanCE",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^6.1.0",
+    "helmet": "^5.0.1",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^8.5.1",
+    "mapbox-gl": "^2.7.0",
+    "mongoose": "^6.1.5",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.4",
+    "nodemailer": "^6.7.2",
+    "pug": "^3.0.2",
+    "slugify": "^1.6.5",
+    "validator": "^13.7.0",
+    "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.15",
+    "parcel": "^2.2.1"
+  }
+}

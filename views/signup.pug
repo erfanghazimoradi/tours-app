@@ -1,0 +1,37 @@
+extends base
+
+block content 
+  main.main
+    div.login-form
+      h2.heading-secondary.ma-bt-lg Create your account!
+      form#signupForm.form.form--signup
+        div.form__group 
+          label.form__label(for='firstname') First name
+          input.form__input(id='firstname' type='text' placeholder='' required='true' autocomplete='off' value='erfan')
+        
+        div.form__group 
+          label.form__label(for='lastname') Last name
+          input.form__input(id='lastname' type='text' placeholder='' required='true' autocomplete='off' value='ghazimoradi')
+
+        div.form__group 
+          label.form__label(for='gender') Gender
+          select.form__input(id='gender') 
+            option(value='not-set' selected) Rather not say
+            option(value='male') Male
+            option(value='female') Female
+            option(value='other') Other
+
+        div.form__group 
+          label.form__label(for='email') Email address
+          input.form__input(id='email' type='email' placeholder='you@example.com' required='true' autocomplete='off' value='erfan@gmail.com')
+        
+        div.form__group.ma-bt-md 
+          label.form__label(for='password') Password
+          input.form__input(id='password' type='password' placeholder='••••••••' required='true' minlength='8' value='user1234')
+
+        div.form__group.ma-bt-md 
+          label.form__label(for='passwordConfirm') Confirm password
+          input.form__input(id='passwordConfirm' type='password' placeholder='••••••••' required='true' minlength='8', value='user1234')
+
+        div.form__group 
+          button.btn.btn--green(type='submit') Sign up

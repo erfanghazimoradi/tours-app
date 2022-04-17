@@ -1,0 +1,11 @@
+footer.footer 
+  .footer__logo 
+    img(src='/img/logo-green-small.png', alt='tours app logo')
+  ul.footer__nav 
+    li: a(href='#') About us 
+    li: a(href='#') Download app 
+    li: a(href='#') Become a guide 
+    li: a(href='#') Careers 
+    li: a(href='#') Contact
+  - const currentYear = new Date().getFullYear();
+  p.footer__copyright &copy #{currentYear} by ErfanCE. All Rights Reserved.
