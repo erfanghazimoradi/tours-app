@@ -1,5 +1,7 @@
 const { join } = require('path');
 const Tour = require('../models/tour-model');
+const Reviews = require('../models/review-model');
+const ObjectId = require('mongoose').Types.ObjectId;
 const { AppError } = require('../utils/appError');
 const { catchAsync } = require('../utils/catchAsync');
 
@@ -53,6 +55,16 @@ const resetPassword = (request, response) => {
   });
 };
 
+// TODO: Error handling(rewrite function)
+const accountReviews = async (request, response) => {
+  const reviews = await Reviews.find({ user: ObjectId(request.user.id) });
+
+  response.render(join(__dirname, '../views/_reviews.pug'), {
+    title: 'Account reviews',
+    reviews
+  });
+};
+
 module.exports = {
   homePage,
   tourPage,
@@ -60,5 +72,6 @@ module.exports = {
   signupPage,
   accountSettings,
   accountPassword,
-  resetPassword
+  resetPassword,
+  accountReviews
 };

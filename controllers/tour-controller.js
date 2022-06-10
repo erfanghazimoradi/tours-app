@@ -1,7 +1,9 @@
+const { join } = require('path');
+const multer = require('multer');
+const sharp = require('sharp');
 const ObjectId = require('mongoose').Types.ObjectId;
 const Tour = require('../models/tour-model');
 const { AppError } = require('../utils/appError');
-const { APIFeatures } = require('../utils/apiFeatures');
 const { catchAsync } = require('../utils/catchAsync');
 const {
   getAll,
@@ -10,6 +12,56 @@ const {
   updateOne,
   deleteOne
 } = require('./handler-controller');
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (request, file, cb) => {
+  file.mimetype.startsWith('image')
+    ? cb(null, true)
+    : cb(new AppError(400, 'Not an image! Please upload only images.'), false);
+};
+
+const multerUpload = multer({ storage: multerStorage, fileFilter: multerFilter });
+
+const uploadToursImages = multerUpload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 }
+]);
+
+const resizeToursImages = catchAsync(async (request, response, next) => {
+  const { id: tourID } = request.params;
+  const { imageCover = [], images = [] } = request.files;
+
+  if (!imageCover.length || !images.length) return next();
+
+  // tour cover image
+  request.body.imageCover = `tour-${tourID}-${Date.now()}-cover.jpeg`;
+
+  await sharp(imageCover[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(join(__dirname, `../public/img/tours/${request.body.imageCover}`));
+
+  // tour images
+  request.body.images = [];
+
+  await Promise.all(
+    images.map(async (image, index) => {
+      const imageFilename = `tour-${tourID}-${Date.now()}-${index + 1}.jpeg`;
+
+      await sharp(image.buffer)
+        .resize(2000, 1333)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(join(__dirname, `../public/img/tours/${imageFilename}`));
+
+      request.body.images.push(imageFilename);
+    })
+  );
+
+  next();
+});
 
 const checkTourID = (request, response, next, value) => {
   const err = new AppError(400, `Invalid tour ID: ${value}`);
@@ -196,5 +248,7 @@ module.exports = {
   tourStats,
   monthlyPlan,
   toursWithin,
-  toursDistance
+  toursDistance,
+  uploadToursImages,
+  resizeToursImages
 };

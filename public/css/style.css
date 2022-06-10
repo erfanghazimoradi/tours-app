@@ -1390,3 +1390,117 @@ body {
 .nav__el--login {
   padding: 1rem 0;
 }
+
+.reviews__textarea {
+  resize: vertical;
+  display: block;
+  font-family: inherit;
+  font-size: 1.5rem;
+  color: inherit;
+  padding: 1.25rem 1.75rem;
+  border: none;
+  width: 100%;
+  background-color: #fff;
+  background-color: #f2f2f2;
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  border-radius: 4px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-bottom: 2rem;
+  font-style: italic;
+  font-weight: 400;
+  margin-bottom: 2rem;
+  /* Pseudo element (a visible thing that isn't really in the DOM).
+      Also needs -ms- */
+}
+
+.reviews__textarea:focus {
+  outline: none;
+  border-bottom: 3px solid #55c57a;
+}
+.reviews__textarea:focus:invalid {
+  border-bottom: 3px solid #ff7730;
+}
+.reviews__textarea::-webkit-input-placeholder {
+  color: #bbb;
+}
+
+.reviews__btn > button {
+  font-size: 1.2rem;
+  padding: 1rem 2rem;
+  border-radius: 5rem;
+  text-transform: uppercase;
+  display: inline-block;
+  text-decoration: none;
+  position: relative;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+  font-weight: 400;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /*Add later when we use this for the button in form*/
+  border: none;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.reviews__card-s {
+  width: 30rem;
+  padding: 4rem 3.5rem;
+  padding-bottom: 1rem;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
+  scroll-snap-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.userReviews {
+  /* margin-top: calc(0px - var(--section-rotate)); */
+  /* padding: calc(5rem + var(--section-rotate)) 0; */
+  position: relative;
+  z-index: 1000;
+  background: -webkit-gradient(
+    linear,
+    left top,
+    right bottom,
+    from(#7dd56f),
+    to(#28b487)
+  );
+  background: linear-gradient(to right bottom, #7dd56f, #28b487);
+  /* clip-path: polygon(
+    0 var(--section-rotate),
+    100% 0,
+    100% calc(100% - var(--section-rotate)),
+    0 100%
+  );
+  -webkit-clip-path: polygon(
+    0 var(--section-rotate),
+    100% 0,
+    100% calc(100% - var(--section-rotate)),
+    0 100%
+  ); */
+}
+
+.userReviews > .reviews {
+  padding: 5rem 0;
+  display: grid;
+  grid-column-gap: 2rem;
+  grid-auto-flow: column;
+  overflow-x: scroll;
+  -ms-scroll-snap-type: x mandatory;
+  scroll-snap-type: x mandatory;
+}

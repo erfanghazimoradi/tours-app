@@ -555,7 +555,7 @@ if (!!changePasswordForm) changePasswordForm.addEventListener('submit', _authent
 if (!!accountResetPassword) accountResetPassword.addEventListener('submit', _authentication.forgetPassword);
 if (!!resetPasswordForm) resetPasswordForm.addEventListener('submit', _authentication.resetPassword);
 
-},{"../modules/mapbox":"gFTeW","../modules/authentication":"lEyGF","../modules/settings":"9PiKM"}],"gFTeW":[function(require,module,exports) {
+},{"../modules/mapbox":"gFTeW","../modules/settings":"9PiKM","../modules/authentication":"lEyGF"}],"gFTeW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "displayMap", ()=>displayMap
@@ -593,37 +593,7 @@ const displayMap = (locations)=>{
     });
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","mapbox-gl":"562rs"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, '__esModule', {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === 'default' || key === '__esModule' || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"562rs":[function(require,module,exports) {
+},{"mapbox-gl":"562rs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"562rs":[function(require,module,exports) {
 (function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() : typeof define === 'function' && define.amd ? define(factory) : (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.mapboxgl = factory());
 })(this, function() {
@@ -29716,129 +29686,95 @@ exports.export = function(dest, destName, get) {
     return mapboxgl$1;
 });
 
-},{}],"lEyGF":[function(require,module,exports) {
+},{}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, '__esModule', {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === 'default' || key === '__esModule' || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"9PiKM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "signup", ()=>signup
+parcelHelpers.export(exports, "editAccount", ()=>editAccount
 );
-parcelHelpers.export(exports, "login", ()=>login
+parcelHelpers.export(exports, "deactiveAccount", ()=>deactiveAccount
 );
-parcelHelpers.export(exports, "logout", ()=>logout
-);
-parcelHelpers.export(exports, "changePassword", ()=>changePassword
-);
-parcelHelpers.export(exports, "forgetPassword", ()=>forgetPassword
-);
-parcelHelpers.export(exports, "resetPassword", ()=>resetPassword
+parcelHelpers.export(exports, "deleteAccount", ()=>deleteAccount
 );
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alerts = require("./alerts");
 var _locationUtils = require("./locationUtils");
-const signup = async (e)=>{
+const editAccount = async (e)=>{
     e.preventDefault();
+    const data = new FormData();
+    const userAvatar = document.getElementById('avatar').files[0];
+    data.append('firstname', document.getElementById('firstname').value);
+    data.append('lastname', document.getElementById('lastname').value);
+    data.append('gender', document.getElementById('gender').value);
+    data.append('email', document.getElementById('email').value);
+    if (!!userAvatar) data.append('avatar', userAvatar);
     try {
-        const data = {
-            firstname: document.getElementById('firstname').value,
-            lastname: document.getElementById('lastname').value,
-            gender: document.getElementById('gender').value,
-            email: document.getElementById('email').value,
-            password: document.getElementById('password').value,
-            passwordConfirm: document.getElementById('passwordConfirm').value
-        };
-        const response = await _axiosDefault.default.post(`${_locationUtils.baseUrl}/api/auth/signup`, data);
+        const response = await _axiosDefault.default.patch(`${_locationUtils.baseUrl}/api/users/account`, data);
         if (response.data.status === 'success') {
-            await _alerts.showAlert(response.data.status, 'Your account created successfully');
+            await _alerts.showAlert(response.data.status, 'Settings updated successfully');
+            location.reload(true);
+        }
+    } catch (err) {
+        console.log(err.response.data);
+        _alerts.showAlert(err.response.data.status, err.response.data.message, 3000);
+    }
+};
+const deactiveAccount = async ()=>{
+    try {
+        const response = await _axiosDefault.default.put(`${_locationUtils.baseUrl}/api/users/account`);
+        if (response.data.status === 'success') {
+            await _alerts.showAlert(response.data.status, 'Your account deactivate successfully');
+            location.reload(true);
             location.href = `${_locationUtils.baseUrl}/`;
         }
     } catch (err) {
         _alerts.showAlert(err.response.data.status, err.response.data.message, 3000);
     }
 };
-const login = async (e)=>{
-    e.preventDefault();
-    const data = {
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value
-    };
+const deleteAccount = async ()=>{
     try {
-        const response = await _axiosDefault.default.post(`${_locationUtils.baseUrl}/api/auth/login`, data);
-        if (response.data.status === 'success') {
-            await _alerts.showAlert(response.data.status, 'Logged in successfully');
+        const response = await _axiosDefault.default.delete(`${_locationUtils.baseUrl}/api/users/account`);
+        if (response.status === 204) {
+            await _alerts.showAlert('success', 'Your account deleted successfully');
+            location.reload(true);
             location.href = `${_locationUtils.baseUrl}/`;
         }
     } catch (err) {
         _alerts.showAlert(err.response.data.status, err.response.data.message, 3000);
-    }
-};
-const logout = async ()=>{
-    try {
-        await _axiosDefault.default.delete(`${_locationUtils.baseUrl}/api/auth/logout`);
-        await _alerts.showAlert('success', 'Logged out successfully');
-        // reload from server for cache
-        location.reload(true);
-        location.href = `${_locationUtils.baseUrl}/`;
-    } catch (err) {
-        _alerts.showAlert('error', 'Log out failed! Try again.', 3000);
-    }
-};
-const changePassword = async (e)=>{
-    e.preventDefault();
-    const data = {
-        currentPassword: document.getElementById('currentPassword').value,
-        password: document.getElementById('password').value,
-        passwordConfirm: document.getElementById('passwordConfirm').value
-    };
-    try {
-        _alerts.elementContent('#changePasswordForm button', 'updating password...');
-        const response = await _axiosDefault.default.patch(`${_locationUtils.baseUrl}/api/auth/change-password`, data);
-        _alerts.elementContent('#changePasswordForm button', 'change password');
-        await _alerts.showAlert(response.data.status, 'Password changed successfully');
-        location.reload(true);
-    } catch (err) {
-        _alerts.showAlert(err.response.data.status, err.response.data.message, 3000);
-    } finally{
-        _alerts.elementContent('#changePasswordForm button', 'change password');
-    }
-};
-const forgetPassword = async (e)=>{
-    e.preventDefault();
-    const data = {
-        email: document.getElementById('resetPasswordEmail').value
-    };
-    try {
-        _alerts.elementContent('#accountResetPassword button', 'sending email...');
-        const response = await _axiosDefault.default.post(`${_locationUtils.baseUrl}/api/auth/forget-password`, data);
-        _alerts.elementContent('#accountResetPassword button', 'send token');
-        _alerts.showAlert(response.data.status, response.data.data.message, 4000);
-    } catch (err) {
-        _alerts.showAlert(err.response.data.status, err.response.data.message, 3000);
-    } finally{
-        _alerts.elementContent('#accountResetPassword button', 'send token');
-    }
-};
-const resetPassword = async (e)=>{
-    e.preventDefault();
-    const resetUrl = location.href.replace(`${_locationUtils.baseUrl}/`, '').replace('?', '');
-    const data = {
-        password: document.getElementById('newPassword').value,
-        passwordConfirm: document.getElementById('newPasswordConfirm').value
-    };
-    try {
-        _alerts.elementContent('#resetPasswordForm button', 'reseting password...');
-        const response = await _axiosDefault.default.patch(`${_locationUtils.baseUrl}/api/auth/${resetUrl}`, data);
-        _alerts.elementContent('#resetPasswordForm button', 'reset password');
-        await _alerts.showAlert(response.data.status, 'Your password reset successfully');
-        location.reload(true);
-        location.href = `${_locationUtils.baseUrl}/`;
-    } catch (err) {
-        await _alerts.showAlert(err.response.data.status, err.response.data.message, 5000);
-    } finally{
-        _alerts.elementContent('#resetPasswordForm button', 'reset password');
     }
 };
 
-},{"axios":"jo6P5","./alerts":"kGH4B","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./locationUtils":"3RPXs"}],"jo6P5":[function(require,module,exports) {
+},{"axios":"jo6P5","./alerts":"kGH4B","./locationUtils":"3RPXs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jo6P5":[function(require,module,exports) {
 module.exports = require('./lib/axios');
 
 },{"./lib/axios":"63MyY"}],"63MyY":[function(require,module,exports) {
@@ -31432,63 +31368,128 @@ parcelHelpers.export(exports, "baseUrl", ()=>baseUrl
 );
 const baseUrl = 'http://localhost:8000';
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9PiKM":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lEyGF":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "editAccount", ()=>editAccount
+parcelHelpers.export(exports, "signup", ()=>signup
 );
-parcelHelpers.export(exports, "deactiveAccount", ()=>deactiveAccount
+parcelHelpers.export(exports, "login", ()=>login
 );
-parcelHelpers.export(exports, "deleteAccount", ()=>deleteAccount
+parcelHelpers.export(exports, "logout", ()=>logout
+);
+parcelHelpers.export(exports, "changePassword", ()=>changePassword
+);
+parcelHelpers.export(exports, "forgetPassword", ()=>forgetPassword
+);
+parcelHelpers.export(exports, "resetPassword", ()=>resetPassword
 );
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alerts = require("./alerts");
 var _locationUtils = require("./locationUtils");
-const editAccount = async (e)=>{
+const signup = async (e)=>{
+    e.preventDefault();
+    try {
+        const data = {
+            firstname: document.getElementById('firstname').value,
+            lastname: document.getElementById('lastname').value,
+            gender: document.getElementById('gender').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            passwordConfirm: document.getElementById('passwordConfirm').value
+        };
+        const response = await _axiosDefault.default.post(`${_locationUtils.baseUrl}/api/auth/signup`, data);
+        if (response.data.status === 'success') {
+            await _alerts.showAlert(response.data.status, 'Your account created successfully');
+            location.href = `${_locationUtils.baseUrl}/`;
+        }
+    } catch (err) {
+        _alerts.showAlert(err.response.data.status, err.response.data.message, 3000);
+    }
+};
+const login = async (e)=>{
     e.preventDefault();
     const data = {
-        firstname: document.getElementById('firstname').value,
-        lastname: document.getElementById('lastname').value,
-        gender: document.getElementById('gender').value,
-        email: document.getElementById('email').value
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value
     };
     try {
-        const response = await _axiosDefault.default.patch(`${_locationUtils.baseUrl}/api/users/account`, data);
+        const response = await _axiosDefault.default.post(`${_locationUtils.baseUrl}/api/auth/login`, data);
         if (response.data.status === 'success') {
-            await _alerts.showAlert(response.data.status, 'Settings updated successfully');
-            location.reload(true);
-        }
-    } catch (err) {
-        console.log(err.response.data);
-        _alerts.showAlert(err.response.data.status, err.response.data.message, 3000);
-    }
-};
-const deactiveAccount = async ()=>{
-    try {
-        const response = await _axiosDefault.default.put(`${_locationUtils.baseUrl}/api/users/account`);
-        if (response.data.status === 'success') {
-            await _alerts.showAlert(response.data.status, 'Your account deactivate successfully');
-            location.reload(true);
+            await _alerts.showAlert(response.data.status, 'Logged in successfully');
             location.href = `${_locationUtils.baseUrl}/`;
         }
     } catch (err) {
         _alerts.showAlert(err.response.data.status, err.response.data.message, 3000);
     }
 };
-const deleteAccount = async ()=>{
+const logout = async ()=>{
     try {
-        const response = await _axiosDefault.default.delete(`${_locationUtils.baseUrl}/api/users/account`);
-        if (response.status === 204) {
-            await _alerts.showAlert('success', 'Your account deleted successfully');
-            location.reload(true);
-            location.href = `${_locationUtils.baseUrl}/`;
-        }
+        await _axiosDefault.default.delete(`${_locationUtils.baseUrl}/api/auth/logout`);
+        await _alerts.showAlert('success', 'Logged out successfully');
+        // reload from server for cache
+        location.reload(true);
+        location.href = `${_locationUtils.baseUrl}/`;
+    } catch (err) {
+        _alerts.showAlert('error', 'Log out failed! Try again.', 3000);
+    }
+};
+const changePassword = async (e)=>{
+    e.preventDefault();
+    const data = {
+        currentPassword: document.getElementById('currentPassword').value,
+        password: document.getElementById('password').value,
+        passwordConfirm: document.getElementById('passwordConfirm').value
+    };
+    try {
+        _alerts.elementContent('#changePasswordForm button', 'updating password...');
+        const response = await _axiosDefault.default.patch(`${_locationUtils.baseUrl}/api/auth/change-password`, data);
+        _alerts.elementContent('#changePasswordForm button', 'change password');
+        await _alerts.showAlert(response.data.status, 'Password changed successfully');
+        location.reload(true);
     } catch (err) {
         _alerts.showAlert(err.response.data.status, err.response.data.message, 3000);
+    } finally{
+        _alerts.elementContent('#changePasswordForm button', 'change password');
+    }
+};
+const forgetPassword = async (e)=>{
+    e.preventDefault();
+    const data = {
+        email: document.getElementById('resetPasswordEmail').value
+    };
+    try {
+        _alerts.elementContent('#accountResetPassword button', 'sending email...');
+        const response = await _axiosDefault.default.post(`${_locationUtils.baseUrl}/api/auth/forget-password`, data);
+        _alerts.elementContent('#accountResetPassword button', 'send token');
+        _alerts.showAlert(response.data.status, response.data.data.message, 4000);
+    } catch (err) {
+        _alerts.showAlert(err.response.data.status, err.response.data.message, 3000);
+    } finally{
+        _alerts.elementContent('#accountResetPassword button', 'send token');
+    }
+};
+const resetPassword = async (e)=>{
+    e.preventDefault();
+    const resetUrl = location.href.replace(`${_locationUtils.baseUrl}/`, '').replace('?', '');
+    const data = {
+        password: document.getElementById('newPassword').value,
+        passwordConfirm: document.getElementById('newPasswordConfirm').value
+    };
+    try {
+        _alerts.elementContent('#resetPasswordForm button', 'reseting password...');
+        const response = await _axiosDefault.default.patch(`${_locationUtils.baseUrl}/api/auth/${resetUrl}`, data);
+        _alerts.elementContent('#resetPasswordForm button', 'reset password');
+        await _alerts.showAlert(response.data.status, 'Your password reset successfully');
+        location.reload(true);
+        location.href = `${_locationUtils.baseUrl}/`;
+    } catch (err) {
+        await _alerts.showAlert(err.response.data.status, err.response.data.message, 5000);
+    } finally{
+        _alerts.elementContent('#resetPasswordForm button', 'reset password');
     }
 };
 
-},{"axios":"jo6P5","./locationUtils":"3RPXs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./alerts":"kGH4B"}]},["dEns8","8Qt0Q"], "8Qt0Q", "parcelRequire3ae1")
+},{"axios":"jo6P5","./alerts":"kGH4B","./locationUtils":"3RPXs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["dEns8","8Qt0Q"], "8Qt0Q", "parcelRequire3ae1")
 
 //# sourceMappingURL=main.js.map

@@ -5,7 +5,7 @@ block nav-item
   +navItem('/account/settings', 'Settings', 'settings', true)
   +navItem('/account/password', 'Password', 'lock')
   +navItem('#', 'Bookings', 'briefcase')
-  +navItem('#', 'Reviews', 'star')
+  +navItem('/account/reviews', 'Reviews', 'star')
   +navItem('#', 'Billing', 'credit-card')
 
 block account-section
@@ -14,7 +14,8 @@ block account-section
     form#editAccountForm.form.form-user-data
       .form__group.form__photo-upload
         img.form__user-photo(src=`/img/users/${user.avatar}`, alt='User photo')
-        a.btn-text(href='') Choose new photo
+        input#avatar.form__upload(type='file', accept='image/*')
+        label(for='avatar') Choose new avatar
       .form__group
         label.form__label(for='firstname') First name
         input#firstname.form__input(type='text', value=`${user.firstname}`, required)

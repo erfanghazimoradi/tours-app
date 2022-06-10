@@ -8,7 +8,9 @@ const {
   userAccount,
   editAccount,
   deleteAccount,
-  deactivateAccount
+  deactivateAccount,
+  uploadUserAvatar,
+  resizeUserAvatar
 } = require('../controllers/user-controller');
 
 // authenticate routes
@@ -17,7 +19,7 @@ router.use(protect);
 router
   .route('/account')
   .get(userAccount, getUser)
-  .patch(editAccount)
+  .patch(uploadUserAvatar, resizeUserAvatar, editAccount)
   .put(deactivateAccount)
   .delete(deleteAccount);
 

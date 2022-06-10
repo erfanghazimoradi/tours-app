@@ -1,14 +1,35 @@
 const { join } = require('path');
 const multer = require('multer');
+const sharp = require('sharp');
 const User = require('../models/user-model');
 const { catchAsync } = require('../utils/catchAsync');
 const { AppError } = require('../utils/appError');
 const { getAll, getOne, updateOne, deleteOne } = require('./handler-controller');
 
-const upload = multer({
-  dest: (request, file, callback) => {
-    callback(null, join(__dirname, '../public/img/users'));
-  }
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (request, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else cb(new AppError(400, 'Not an image! Please upload only images.'), false);
+};
+
+const multerUpload = multer({ storage: multerStorage, fileFilter: multerFilter });
+
+const uploadUserAvatar = multerUpload.single('avatar');
+
+const resizeUserAvatar = catchAsync(async (request, response, next) => {
+  if (!request.file) return next();
+
+  request.file.filename = `user-${request.user.id}-${Date.now()}.jpeg`;
+
+  await sharp(request.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({ quality: 95 })
+    .toFile(join(__dirname, `../public/img/users/${request.file.filename}`));
+
+  next();
 });
 
 const sanitizingBody = (body, ...allowed) => {
@@ -46,6 +67,8 @@ const editAccount = catchAsync(async (request, response, next) => {
     'gender',
     'avatar'
   );
+
+  if (!!request.file) sanitizedBody.avatar = request.file.filename;
 
   const updated = await User.findByIdAndUpdate(request.user._id, sanitizedBody, {
     new: true,
@@ -102,5 +125,6 @@ module.exports = {
   editAccount,
   deactivateAccount,
   deleteAccount,
-  upload
+  uploadUserAvatar,
+  resizeUserAvatar
 };

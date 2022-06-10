@@ -1,0 +1,19 @@
+extends account
+include _reviewCard
+
+block nav-item 
+  +navItem('/account/settings', 'Settings', 'settings')
+  +navItem('/account/password', 'Password', 'lock')
+  +navItem('#', 'Bookings', 'briefcase')
+  +navItem('/account/reviews', 'Reviews', 'star', true)
+  +navItem('#', 'Billing', 'credit-card')
+
+block account-section
+  .user-view__form-container
+    h2.heading-secondary.ma-bt-md Your account reviews
+    section.userReviews
+      .reviews
+        each review in reviews
+          +reviewCard(review)
+    
+  .line &nbsp;

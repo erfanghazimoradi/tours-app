@@ -5,12 +5,15 @@ import { baseUrl } from './locationUtils';
 const editAccount = async e => {
   e.preventDefault();
 
-  const data = {
-    firstname: document.getElementById('firstname').value,
-    lastname: document.getElementById('lastname').value,
-    gender: document.getElementById('gender').value,
-    email: document.getElementById('email').value
-  };
+  const data = new FormData();
+  const userAvatar = document.getElementById('avatar').files[0];
+
+  data.append('firstname', document.getElementById('firstname').value);
+  data.append('lastname', document.getElementById('lastname').value);
+  data.append('gender', document.getElementById('gender').value);
+  data.append('email', document.getElementById('email').value);
+
+  if (!!userAvatar) data.append('avatar', userAvatar);
 
   try {
     const response = await axios.patch(`${baseUrl}/api/users/account`, data);
