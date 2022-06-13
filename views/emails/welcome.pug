@@ -1,0 +1,18 @@
+extends baseEmail
+
+block content
+  p.capitalize Hi #{firstname},
+  p Welcome to Tours App, we're glad to have you 🎉🙏
+  p We're all a big familiy here, so make sure to upload your user avatar so we get to know you a bit better!
+  table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+    tbody
+      tr
+        td(align='left')
+          table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+            tbody
+              tr
+                td
+                  a(href=`${url}`, target='_blank') Upload user avatar
+  p If you need any help with booking your next tour, please don't hesitate to contact me!
+  p - Erfan Ghazimoradi, 
+    a(href='erfan.ghazimoradi.work@gmail.com') erfan.ghazimoradi.work@gmail.com

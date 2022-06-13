@@ -55,6 +55,12 @@ const resetPassword = (request, response) => {
   });
 };
 
+const forgetPassword = (request, response) => {
+  response.render(join(__dirname, '../views/forgetPassword.pug'), {
+    title: 'Forget password'
+  });
+};
+
 // TODO: Error handling(rewrite function)
 const accountReviews = async (request, response) => {
   const reviews = await Reviews.find({ user: ObjectId(request.user.id) });
@@ -73,5 +79,6 @@ module.exports = {
   accountSettings,
   accountPassword,
   resetPassword,
+  forgetPassword,
   accountReviews
 };

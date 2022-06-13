@@ -1282,7 +1282,7 @@ body {
   background-color: #fff;
   -webkit-box-shadow: 0 2.5rem 8rem 2rem rgba(0, 0, 0, 0.06);
   box-shadow: 0 2.5rem 8rem 2rem rgba(0, 0, 0, 0.06);
-  padding: 5rem 7rem;
+  padding: 3.5rem 6rem;
   border-radius: 5px;
 }
 
@@ -1503,4 +1503,26 @@ body {
   overflow-x: scroll;
   -ms-scroll-snap-type: x mandatory;
   scroll-snap-type: x mandatory;
+}
+
+.user-view__form-container {
+  max-width: 70rem;
+  margin: 0 auto;
+  padding:  0;
+}
+
+#loginForm a {
+  display: block;
+  color: #777;
+  text-decoration: none !important;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  font-size: 1.3rem;
+  text-align: center;
+  margin: 0 auto;
+  width: 100%;
+}
+#loginForm  a:hover,
+#loginForm  a:active {
+  color: #55c57a;
 }

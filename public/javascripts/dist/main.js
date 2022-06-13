@@ -533,6 +533,7 @@ const deleteAccountBtn = document.getElementById('deleteAccountBtn');
 const changePasswordForm = document.getElementById('changePasswordForm');
 const accountResetPassword = document.getElementById('accountResetPassword');
 const resetPasswordForm = document.getElementById('resetPasswordForm');
+const forgetPasswordForm = document.getElementById('forgetPasswordForm');
 // mapbox
 if (!!mapbox) {
     const locations = JSON.parse(mapbox.dataset.locations);
@@ -552,8 +553,9 @@ if (!!editAccountForm) editAccountForm.addEventListener('submit', _settings.edit
 if (!!deactiveAccountBtn) deactiveAccountBtn.addEventListener('click', _settings.deactiveAccount);
 if (!!deleteAccountBtn) deleteAccountBtn.addEventListener('click', _settings.deleteAccount);
 if (!!changePasswordForm) changePasswordForm.addEventListener('submit', _authentication.changePassword);
-if (!!accountResetPassword) accountResetPassword.addEventListener('submit', _authentication.forgetPassword);
+if (!!accountResetPassword) accountResetPassword.addEventListener('submit', _authentication.resetPasswordToken);
 if (!!resetPasswordForm) resetPasswordForm.addEventListener('submit', _authentication.resetPassword);
+if (!!forgetPasswordForm) forgetPasswordForm.addEventListener('submit', _authentication.forgetPasswordToken);
 
 },{"../modules/mapbox":"gFTeW","../modules/settings":"9PiKM","../modules/authentication":"lEyGF"}],"gFTeW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -31379,9 +31381,11 @@ parcelHelpers.export(exports, "logout", ()=>logout
 );
 parcelHelpers.export(exports, "changePassword", ()=>changePassword
 );
-parcelHelpers.export(exports, "forgetPassword", ()=>forgetPassword
-);
 parcelHelpers.export(exports, "resetPassword", ()=>resetPassword
+);
+parcelHelpers.export(exports, "resetPasswordToken", ()=>resetPasswordToken
+);
+parcelHelpers.export(exports, "forgetPasswordToken", ()=>forgetPasswordToken
 );
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
@@ -31398,7 +31402,9 @@ const signup = async (e)=>{
             password: document.getElementById('password').value,
             passwordConfirm: document.getElementById('passwordConfirm').value
         };
+        _alerts.elementContent('#signupForm button', 'signing up...');
         const response = await _axiosDefault.default.post(`${_locationUtils.baseUrl}/api/auth/signup`, data);
+        _alerts.elementContent('#signupForm button', 'sign up');
         if (response.data.status === 'success') {
             await _alerts.showAlert(response.data.status, 'Your account created successfully');
             location.href = `${_locationUtils.baseUrl}/`;
@@ -31453,7 +31459,7 @@ const changePassword = async (e)=>{
         _alerts.elementContent('#changePasswordForm button', 'change password');
     }
 };
-const forgetPassword = async (e)=>{
+const resetPasswordToken = async (e)=>{
     e.preventDefault();
     const data = {
         email: document.getElementById('resetPasswordEmail').value
@@ -31467,6 +31473,22 @@ const forgetPassword = async (e)=>{
         _alerts.showAlert(err.response.data.status, err.response.data.message, 3000);
     } finally{
         _alerts.elementContent('#accountResetPassword button', 'send token');
+    }
+};
+const forgetPasswordToken = async (e)=>{
+    e.preventDefault();
+    const data = {
+        email: document.getElementById('forgetPasswordEmail').value
+    };
+    try {
+        _alerts.elementContent('#forgetPasswordForm button', 'sending email...');
+        const response = await _axiosDefault.default.post(`${_locationUtils.baseUrl}/api/auth/forget-password`, data);
+        _alerts.elementContent('#forgetPasswordForm button', 'Send login link');
+        _alerts.showAlert(response.data.status, response.data.data.message, 4000);
+    } catch (err) {
+        _alerts.showAlert(err.response.data.status, err.response.data.message, 3000);
+    } finally{
+        _alerts.elementContent('#accountResetPassword button', 'Send login link');
     }
 };
 const resetPassword = async (e)=>{

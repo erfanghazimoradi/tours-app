@@ -15,7 +15,11 @@ const signup = async e => {
       passwordConfirm: document.getElementById('passwordConfirm').value
     };
 
+    elementContent('#signupForm button', 'signing up...');
+
     const response = await axios.post(`${baseUrl}/api/auth/signup`, data);
+
+    elementContent('#signupForm button', 'sign up');
 
     if (response.data.status === 'success') {
       await showAlert(response.data.status, 'Your account created successfully');
@@ -88,7 +92,7 @@ const changePassword = async e => {
   }
 };
 
-const forgetPassword = async e => {
+const resetPasswordToken = async e => {
   e.preventDefault();
 
   const data = { email: document.getElementById('resetPasswordEmail').value };
@@ -105,6 +109,26 @@ const forgetPassword = async e => {
     showAlert(err.response.data.status, err.response.data.message, 3000);
   } finally {
     elementContent('#accountResetPassword button', 'send token');
+  }
+};
+
+const forgetPasswordToken = async e => {
+  e.preventDefault();
+
+  const data = { email: document.getElementById('forgetPasswordEmail').value };
+
+  try {
+    elementContent('#forgetPasswordForm button', 'sending email...');
+
+    const response = await axios.post(`${baseUrl}/api/auth/forget-password`, data);
+
+    elementContent('#forgetPasswordForm button', 'Send login link');
+
+    showAlert(response.data.status, response.data.data.message, 4000);
+  } catch (err) {
+    showAlert(err.response.data.status, err.response.data.message, 3000);
+  } finally {
+    elementContent('#accountResetPassword button', 'Send login link');
   }
 };
 
@@ -136,4 +160,12 @@ const resetPassword = async e => {
   }
 };
 
-export { signup, login, logout, changePassword, forgetPassword, resetPassword };
+export {
+  signup,
+  login,
+  logout,
+  changePassword,
+  resetPassword,
+  resetPasswordToken,
+  forgetPasswordToken
+};

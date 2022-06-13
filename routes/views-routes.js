@@ -6,7 +6,8 @@ const {
   tourPage,
   loginPage,
   signupPage,
-  resetPassword
+  resetPassword,
+  forgetPassword
 } = require('../controllers/views-controller');
 
 router.use('/account', accountRoute);
@@ -24,5 +25,7 @@ router.get('/signup', signupPage);
 router.get('/login', loginPage);
 
 router.get('/reset-password/:token', resetPassword);
+
+router.get('/forget-password', forgetPassword);
 
 module.exports = router;

@@ -5,8 +5,9 @@ import {
   login,
   logout,
   changePassword,
-  forgetPassword,
-  resetPassword
+  resetPassword,
+  resetPasswordToken,
+  forgetPasswordToken
 } from '../modules/authentication';
 
 const mapbox = document.getElementById('map');
@@ -20,6 +21,7 @@ const deleteAccountBtn = document.getElementById('deleteAccountBtn');
 const changePasswordForm = document.getElementById('changePasswordForm');
 const accountResetPassword = document.getElementById('accountResetPassword');
 const resetPasswordForm = document.getElementById('resetPasswordForm');
+const forgetPasswordForm = document.getElementById('forgetPasswordForm');
 
 // mapbox
 if (!!mapbox) {
@@ -50,6 +52,9 @@ if (!!deleteAccountBtn) deleteAccountBtn.addEventListener('click', deleteAccount
 if (!!changePasswordForm) changePasswordForm.addEventListener('submit', changePassword);
 
 if (!!accountResetPassword)
-  accountResetPassword.addEventListener('submit', forgetPassword);
+  accountResetPassword.addEventListener('submit', resetPasswordToken);
 
 if (!!resetPasswordForm) resetPasswordForm.addEventListener('submit', resetPassword);
+
+if (!!forgetPasswordForm)
+  forgetPasswordForm.addEventListener('submit', forgetPasswordToken);

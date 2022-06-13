@@ -3,8 +3,8 @@ const { createHash } = require('crypto');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user-model');
 const { AppError } = require('../utils/appError');
+const { Email } = require('../utils/sendEmail');
 const { catchAsync } = require('../utils/catchAsync');
-const { sendEmail } = require('../utils/sendEmail');
 
 const signToken = id =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -43,6 +43,11 @@ const signup = catchAsync(async (request, response, next) => {
     gender,
     avatar
   });
+
+  const accountUrl = `${request.protocol}://${request.get('host')}/account/settings`;
+
+  // send welcome email
+  await new Email(user, accountUrl).sendWelcome();
 
   // sign token sync
   sendToken(user, 201, response);
@@ -152,44 +157,12 @@ const forgetPassword = catchAsync(async (request, response, next) => {
   const resetToken = user.generateResetPasswordToken();
   await user.save({ validateBeforeSave: false });
 
-  const resetURL = `${request.protocol}://${request.get(
-    'host'
-  )}/auth/reset-password/${resetToken}`;
-
-  const resetUrlClient = `${request.protocol}://${request.get(
+  const resetUrl = `${request.protocol}://${request.get(
     'host'
   )}/reset-password/${resetToken}`;
 
   try {
-    await sendEmail({
-      email,
-      subject: 'Tours App: Your password reset token (valid for 10 min)',
-      message: `Forgot your password? \nSubmit a PATCH request with your new password and passwordConfirm to: ${resetURL} \nIf you didn't forget your password, please ignore this email!`,
-      html: `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 1rem">
-      <h3>Hi username</h3>
-      <p>We got a request to reset your Tours App password.</p>
-      <a
-        href="${resetUrlClient}"
-        style="
-          text-decoration: none;
-          display: block;
-          width: 200px;
-          background-color: #44ad67;
-          padding: 1rem;
-          border-radius: 1rem;
-          color: #f9f9f9;
-          margin: 1rem 0;
-          text-align: center;
-        "
-        >Reset password</a
-      >
-      <p>
-        If you ignore this message, your password will not be change. If you didn't request a
-        password reset, ignore this message.
-      </p>
-    </div>
-    `
-    });
+    await new Email(user, resetUrl).sendResetPassword();
 
     response.status(200).json({
       status: 'success',
