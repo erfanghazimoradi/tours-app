@@ -5,9 +5,14 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const hpp = require('hpp');
 const xss = require('xss-clean');
+const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
+
+const config = dotenv.config({ path: join(__dirname, './config.env') });
+
+if (config.error) console.error(`[-] dotenv config > ${config.error.message}`);
 
 const { AppError } = require('./utils/appError');
 const { globalErrorHandler } = require('./controllers/error-controller');
@@ -22,10 +27,6 @@ process.on('uncaughtException', err => {
 
   process.exit(1);
 });
-
-const config = dotenv.config({ path: join(__dirname, './config.env') });
-
-if (config.error) console.error(`[-] dotenv config > ${config.error.message}`);
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -64,6 +65,8 @@ app.use(xss());
 app.use(hpp());
 
 app.use('/', limiter);
+
+app.use(compression());
 
 // app routes
 app.use('/', appRoutes);

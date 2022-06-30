@@ -1,5 +1,6 @@
 import { displayMap } from '../modules/mapbox';
 import { deactiveAccount, editAccount, deleteAccount } from '../modules/settings';
+import { bookTour } from '../modules/bookings';
 import {
   signup,
   login,
@@ -22,6 +23,9 @@ const changePasswordForm = document.getElementById('changePasswordForm');
 const accountResetPassword = document.getElementById('accountResetPassword');
 const resetPasswordForm = document.getElementById('resetPasswordForm');
 const forgetPasswordForm = document.getElementById('forgetPasswordForm');
+const bookTourBtn = document.getElementById('bookTourBtn');
+
+console.log(!!bookTourBtn);
 
 // mapbox
 if (!!mapbox) {
@@ -58,3 +62,5 @@ if (!!resetPasswordForm) resetPasswordForm.addEventListener('submit', resetPassw
 
 if (!!forgetPasswordForm)
   forgetPasswordForm.addEventListener('submit', forgetPasswordToken);
+
+if (!!bookTourBtn) bookTourBtn.addEventListener('click', bookTour);

@@ -154,7 +154,7 @@ TourSchema.pre(/^find/, function (next) {
 });
 
 TourSchema.post(/^find/, function (docs, next) {
-  console.log(`[i] query took ${Date.now() - this.queryStart}ms.`);
+  // console.log(`[i] query took ${Date.now() - this.queryStart}ms.`);
 
   next();
 });
@@ -169,7 +169,7 @@ TourSchema.pre('aggregate', function (next) {
 });
 
 TourSchema.post('aggregate', function (docs, next) {
-  console.log(`[i] aggregation took ${Date.now() - this.aggregateStart}ms.`);
+  // console.log(`[i] aggregation took ${Date.now() - this.aggregateStart}ms.`);
 
   next();
 });

@@ -15,7 +15,7 @@ const signup = async e => {
       passwordConfirm: document.getElementById('passwordConfirm').value
     };
 
-    elementContent('#signupForm button', 'signing up...');
+    elementContent('#signupForm button', 'loading...');
 
     const response = await axios.post(`${baseUrl}/api/auth/signup`, data);
 
@@ -28,6 +28,8 @@ const signup = async e => {
     }
   } catch (err) {
     showAlert(err.response.data.status, err.response.data.message, 3000);
+  } finally {
+    elementContent('#signupForm button', 'sign up');
   }
 };
 
@@ -77,7 +79,7 @@ const changePassword = async e => {
   };
 
   try {
-    elementContent('#changePasswordForm button', 'updating password...');
+    elementContent('#changePasswordForm button', 'loading...');
 
     const response = await axios.patch(`${baseUrl}/api/auth/change-password`, data);
 
@@ -98,7 +100,7 @@ const resetPasswordToken = async e => {
   const data = { email: document.getElementById('resetPasswordEmail').value };
 
   try {
-    elementContent('#accountResetPassword button', 'sending email...');
+    elementContent('#accountResetPassword button', 'loading...');
 
     const response = await axios.post(`${baseUrl}/api/auth/forget-password`, data);
 
@@ -118,7 +120,7 @@ const forgetPasswordToken = async e => {
   const data = { email: document.getElementById('forgetPasswordEmail').value };
 
   try {
-    elementContent('#forgetPasswordForm button', 'sending email...');
+    elementContent('#forgetPasswordForm button', 'loading...');
 
     const response = await axios.post(`${baseUrl}/api/auth/forget-password`, data);
 
@@ -143,7 +145,7 @@ const resetPassword = async e => {
   };
 
   try {
-    elementContent('#resetPasswordForm button', 'reseting password...');
+    elementContent('#resetPasswordForm button', 'loading...');
 
     const response = await axios.patch(`${baseUrl}/api/auth/${resetUrl}`, data);
 
