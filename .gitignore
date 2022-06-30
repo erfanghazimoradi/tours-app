@@ -2,4 +2,4 @@
 .parcel-cache
 .DS_Store
 .vscode
-config.env
+/config.env
